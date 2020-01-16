@@ -1,6 +1,5 @@
 import React from "react";
 import Tree from "react-d3-tree";
-import { findRenderedComponentWithType } from "react-dom/test-utils";
 
 const debugData = [
   {
@@ -59,10 +58,11 @@ const containerStyles = {
   height: "100vh"
 };
 
-const Card = ({ nodeData }) => (
+const Node = ({ nodeData }) => (
   <div>
-    <div className="card">
+    <div className="node">
       <div
+        className="node-header"
         style={{
           border: "1px solid black",
           height: "50px",
@@ -71,7 +71,7 @@ const Card = ({ nodeData }) => (
           background: "white"
         }}
       ></div>
-      <div className="card-body">
+      <div className="node-body">
         <p
           className="card-title"
           style={{
@@ -112,35 +112,23 @@ const svgSquare = {
 export default class CenteredTree extends React.PureComponent {
   state = {};
 
-  componentDidMount() {
-    const dimensions = this.treeContainer.getBoundingClientRect();
-    this.setState({
-      translate: {
-        x: dimensions.width / 2,
-        y: dimensions.height / 2
-      }
-    });
-  }
-
   render() {
     return (
       <div style={containerStyles} ref={tc => (this.treeContainer = tc)}>
         <Tree
           data={debugData}
-          // translate={this.state.translate}
           zoomable={true}
           orientation="vertical"
-          scaleExtent={{ min: 1, max: 3 }}
-          pathFunc="step"
+          pathFunc="straight"
+          scaleExtent={{ min: 1, max: 4 }}
           allowForeignObjects
           nodeSvgShape={svgSquare}
           translate={{ x: 400, y: 200 }}
           nodeSize={{ x: 300, y: 200 }}
           nodeLabelComponent={{
-            render: <Card />,
+            render: <Node />,
             foreignObjectWrapper: {
               style: {
-                // border: "1px solid black",
                 width: "150px",
                 height: "90px",
                 x: -75,
